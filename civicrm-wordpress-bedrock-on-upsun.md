@@ -11,7 +11,7 @@ Recently I published the [CiviCRM with Drupal 11 on Upsun guide](https://develop
 
 This guide walks through deploying CiviCRM on top of a Bedrock-based WordPress install on Upsun, using a public Composer template I developed at [github.com/Skvare/upsun-wordpress-bedrock-civicrm-template](https://github.com/Skvare/upsun-wordpress-bedrock-civicrm-template). The template encodes all the small but important decisions — read-only filesystem layout, separate CiviCRM database, mounted persistent directories, nginx rules to block direct PHP execution in upload paths, and crons for both WordPress and CiviCRM — so you don't have to rediscover them.
 
-If you've read the Drupal version, the shape will look familiar. The hosting platform's strengths are the same: Upsun's PHP inage, separate persistent mounts, MariaDB with multiple schemas, and source operations for auto-update all map cleanly onto how a healthy CiviCRM install actually wants to live.
+The hosting platform's strengths are secure and powerful: Upsun's configurable PHP image, secure Nginx configuration, separate persistent mounts, MariaDB with multiple schemas, and source operations for auto-update all map cleanly onto how a healthy CiviCRM install should be maintained.
 
 ## Why Bedrock?
 
