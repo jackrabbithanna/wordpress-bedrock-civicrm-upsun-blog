@@ -7,11 +7,11 @@ description: A production-ready setup for deploying CiviCRM on top of WordPress 
 
 # CiviCRM with WordPress Bedrock on Upsun
 
-After publishing the [CiviCRM with Drupal 11 on Upsun guide](https://developer.upsun.com/posts/hands-on/civicrm-drupal-11-on-upsun), the most common follow-up question I got was: *"Does the same approach work for WordPress?"* The answer is yes — and arguably the WordPress side is even tidier when you start from [Roots Bedrock](https://roots.io/bedrock/) instead of stock WordPress.
+Recently I published the [CiviCRM with Drupal 11 on Upsun guide](https://developer.upsun.com/posts/hands-on/civicrm-drupal-11-on-upsun), and a common follow-up question I got was: *"Does the same approach work for WordPress?"* The answer is yes — and arguably the WordPress side is even tidier when you start from [Roots Bedrock](https://roots.io/bedrock/) instead of stock WordPress.
 
-This guide walks through deploying CiviCRM on top of a Bedrock-based WordPress install on Upsun, using the public Composer template at [github.com/Skvare/upsun-wordpress-bedrock-civicrm-template](https://github.com/Skvare/upsun-wordpress-bedrock-civicrm-template). The template encodes all the small but important decisions — read-only filesystem layout, separate CiviCRM database, mounted persistent directories, nginx rules to block direct PHP execution in upload paths, and crons for both WordPress and CiviCRM — so you don't have to rediscover them.
+This guide walks through deploying CiviCRM on top of a Bedrock-based WordPress install on Upsun, using a public Composer template I developed at [github.com/Skvare/upsun-wordpress-bedrock-civicrm-template](https://github.com/Skvare/upsun-wordpress-bedrock-civicrm-template). The template encodes all the small but important decisions — read-only filesystem layout, separate CiviCRM database, mounted persistent directories, nginx rules to block direct PHP execution in upload paths, and crons for both WordPress and CiviCRM — so you don't have to rediscover them.
 
-If you've read the Drupal version, the shape will look familiar. The hosting platform's strengths are the same: Upsun's Composable Image, separate persistent mounts, MariaDB with multiple schemas, and source operations for auto-update all map cleanly onto how a healthy CiviCRM install actually wants to live.
+If you've read the Drupal version, the shape will look familiar. The hosting platform's strengths are the same: Upsun's PHP inage, separate persistent mounts, MariaDB with multiple schemas, and source operations for auto-update all map cleanly onto how a healthy CiviCRM install actually wants to live.
 
 ## Why Bedrock?
 
@@ -105,7 +105,7 @@ If you don't have a Blackfire subscription, drop that line — listing an extens
 
 ### Database: one service, two schemas
 
-CiviCRM strongly prefers its own database. On Upsun you don't need to provision two separate services — MariaDB supports multiple schemas in one instance, with separate endpoints per schema:
+I recommend installing CiviCRM in its own database. On Upsun you don't need to provision two separate services — MariaDB supports multiple schemas in one instance, with separate endpoints per schema:
 
 ```yaml
 services:
@@ -387,7 +387,7 @@ To add an extension, find its `.zip` URL on civicrm.org, add it to this list, ru
 }
 ```
 
-Two upstream PRs and one local patch. The civi-core and civi-wordpress patches relax assumptions about being able to write `civicrm.settings.php` at runtime — exactly the assumption a read-only PaaS filesystem violates. These will go away once the upstream PRs merge; in the meantime, `cweagans/composer-patches` applies them at install time.
+Two upstream PRs and one local patch. The civi-core and civi-wordpress patches make necessary changes for discovering CiviCRM Core in composer's vendor directory, and relax assumptions about being able to write `civicrm.settings.php` at runtime — exactly the assumption a read-only PaaS filesystem violates. These will go away once the upstream PRs merge; in the meantime, `cweagans/composer-patches` applies them at install time.
 
 ### Post-install scripts
 
